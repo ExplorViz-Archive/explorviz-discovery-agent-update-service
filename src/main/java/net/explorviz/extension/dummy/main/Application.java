@@ -1,17 +1,13 @@
 package net.explorviz.extension.dummy.main;
 
-import javax.inject.Singleton;
 import javax.ws.rs.ApplicationPath;
 
-import org.glassfish.hk2.utilities.binding.AbstractBinder;
 import org.glassfish.jersey.server.ResourceConfig;
 
-import com.github.jasminb.jsonapi.ResourceConverter;
-
+import net.explorviz.api.ExtensionAPIImpl;
 import net.explorviz.extension.dummy.model.DummyModel;
 import net.explorviz.extension.dummy.model.SubDummyModel;
 import net.explorviz.extension.dummy.providers.DummyModelProvider;
-import net.explorviz.injection.ResourceConverterFactory;
 
 @ApplicationPath("/extension/dummy")
 public class Application extends ResourceConfig {
@@ -20,15 +16,13 @@ public class Application extends ResourceConfig {
 
 		// register the models that you wan't to parse to JSONAPI-conform JSON,
 		// i.e. exchange with frontend
-		final ResourceConverterFactory factory = new ResourceConverterFactory();
-		factory.registerClass(DummyModel.class);
-		factory.registerClass(SubDummyModel.class);
+		final ExtensionAPIImpl coreAPI = ExtensionAPIImpl.getInstance();
 
-		final AbstractBinder dependencyBinder = new ExtensionDependencyInjectionBinder();
-		dependencyBinder.bindFactory(factory).to(ResourceConverter.class).in(Singleton.class);
+		coreAPI.registerSpecificModel("DummyModel", DummyModel.class);
+		coreAPI.registerSpecificModel("SubDummyModel", SubDummyModel.class);
 
 		// register DI
-		register(dependencyBinder);
+		register(new ExtensionDependencyInjectionBinder());
 
 		// Enable CORS
 		register(CORSResponseFilter.class);
