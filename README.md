@@ -8,7 +8,7 @@ This repository holds a dummy extension for [ExplorViz Backend](https://github.c
 3. Rename the root folder *explorviz-backend-extension-dummy* to *explorviz-backend-extension-X*, where X is the name of your extension
 4. Run `./gradlew renameProject -PextensionName="X"`, where X is the name of your extension
 4. Adjust the README.md (e.g. remove Setup sections)
-5. Stage and commit changes with `git commit -am "renaming dummy"`
+5. Stage and commit changes with `git add -A && git commit -am "renaming dummy"`
 6. Push to remote origin and set upstream with `git push -u origin master`
 7. Follow the [Backend Setup](https://github.com/ExplorViz/explorviz-backend#explorviz-backend)
 8. In Eclipse: `Import -> Gradle -> Existing Gradle Project`
