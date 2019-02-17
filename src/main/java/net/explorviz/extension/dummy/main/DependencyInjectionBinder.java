@@ -1,6 +1,8 @@
 package net.explorviz.extension.dummy.main;
 
+import com.github.jasminb.jsonapi.ResourceConverter;
 import javax.inject.Singleton;
+import net.explorviz.extension.dummy.injection.ResourceConverterFactory;
 import net.explorviz.shared.config.annotations.ConfigValues;
 import net.explorviz.shared.config.annotations.injection.ConfigInjectionResolver;
 import net.explorviz.shared.config.annotations.injection.ConfigValuesInjectionResolver;
@@ -24,8 +26,8 @@ public class DependencyInjectionBinder extends AbstractBinder {
     this.bind(new ConfigValuesInjectionResolver())
         .to(new TypeLiteral<InjectionResolver<ConfigValues>>() {});
 
-    // this.bindFactory(ResourceConverterFactory.class).to(ResourceConverter.class)
-    // .in(Singleton.class);
+    this.bindFactory(ResourceConverterFactory.class).to(ResourceConverter.class)
+        .in(Singleton.class);
 
     // ErrorObject Handler
     this.bind(ErrorObjectHelper.class).to(ErrorObjectHelper.class).in(Singleton.class);

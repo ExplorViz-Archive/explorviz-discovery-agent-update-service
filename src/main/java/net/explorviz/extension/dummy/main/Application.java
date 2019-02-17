@@ -1,7 +1,8 @@
 package net.explorviz.extension.dummy.main;
 
 import javax.ws.rs.ApplicationPath;
-import net.explorviz.extension.dummy.providers.DummyModelProvider;
+import net.explorviz.extension.dummy.providers.JsonApiProvider;
+import net.explorviz.extension.dummy.resources.TestResource;
 import org.glassfish.jersey.server.ResourceConfig;
 
 @ApplicationPath("/extension/dummy")
@@ -19,9 +20,9 @@ public class Application extends ResourceConfig {
     register(CORSResponseFilter.class);
 
     // register all providers in the given package
-    register(DummyModelProvider.class);
+    register(JsonApiProvider.class);
 
     // register all resources in the given package
-    packages("net.explorviz.extension.dummy.resources");
+    register(TestResource.class);
   }
 }
