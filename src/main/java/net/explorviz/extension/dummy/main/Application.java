@@ -1,6 +1,5 @@
 package net.explorviz.extension.dummy.main;
 
-import net.explorviz.extension.dummy.providers.JsonApiProvider;
 import net.explorviz.extension.dummy.resources.TestResource;
 import org.glassfish.jersey.server.ResourceConfig;
 

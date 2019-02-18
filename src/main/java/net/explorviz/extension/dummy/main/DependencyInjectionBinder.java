@@ -2,7 +2,6 @@ package net.explorviz.extension.dummy.main;
 
 import com.github.jasminb.jsonapi.ResourceConverter;
 import javax.inject.Singleton;
-import net.explorviz.extension.dummy.injection.ResourceConverterFactory;
 import net.explorviz.shared.config.annotations.ConfigValues;
 import net.explorviz.shared.config.annotations.injection.ConfigInjectionResolver;
 import net.explorviz.shared.config.annotations.injection.ConfigValuesInjectionResolver;
