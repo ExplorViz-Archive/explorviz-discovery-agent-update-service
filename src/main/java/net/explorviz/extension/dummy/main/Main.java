@@ -30,11 +30,17 @@ public final class Main {
    */
   public static void main(final String[] args) {
 
-    final Server server = new Server(getPort());
+    int port = getPort();
+
+    final Server server = new Server(port);
+
+    String contextPath = getContextPath();
 
     final ServletHolder jerseyServlet = new ServletHolder(new ServletContainer(createJaxRsApp()));
-    final ServletContextHandler context = new ServletContextHandler(server, getContextPath());
+    final ServletContextHandler context = new ServletContextHandler(server, contextPath);
     context.addServlet(jerseyServlet, "/*");
+
+    LOGGER.info("Server starting: http://localhost:" + port + contextPath);
 
     try {
       server.start();

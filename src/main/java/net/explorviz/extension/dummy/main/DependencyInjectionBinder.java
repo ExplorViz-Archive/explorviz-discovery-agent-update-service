@@ -2,6 +2,7 @@ package net.explorviz.extension.dummy.main;
 
 import com.github.jasminb.jsonapi.ResourceConverter;
 import javax.inject.Singleton;
+import net.explorviz.shared.common.jsonapi.ResourceConverterFactory;
 import net.explorviz.shared.config.annotations.ConfigValues;
 import net.explorviz.shared.config.annotations.injection.ConfigInjectionResolver;
 import net.explorviz.shared.config.annotations.injection.ConfigValuesInjectionResolver;
@@ -30,6 +31,8 @@ public class DependencyInjectionBinder extends AbstractBinder {
 
     // ErrorObject Handler
     this.bind(ErrorObjectHelper.class).to(ErrorObjectHelper.class).in(Singleton.class);
+    
+    // TODO Common DI Binder
 
 
   }

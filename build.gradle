@@ -22,6 +22,10 @@ dependencies {
   	// ExplorViz common exception handling
   	implementation 'com.github.explorviz.explorviz-backend-shared:exception-handling:master-SNAPSHOT'
   	
+  	implementation 'com.github.explorviz.explorviz-backend-shared:common-concerns:master-SNAPSHOT'
+  	
+  	implementation 'com.github.explorviz.explorviz-backend-shared:security:master-SNAPSHOT'
+  	
   	// Local linking of external project dependency instead of Jitpack
   	//implementation project(':common-concerns')
   	
