@@ -1,11 +1,9 @@
 package net.explorviz.extension.dummy.main;
 
-import javax.ws.rs.ApplicationPath;
 import net.explorviz.extension.dummy.providers.JsonApiProvider;
 import net.explorviz.extension.dummy.resources.TestResource;
 import org.glassfish.jersey.server.ResourceConfig;
 
-@ApplicationPath("/extension/dummy")
 public class Application extends ResourceConfig {
 
   public Application() {
