@@ -16,6 +16,11 @@ configurations.all {
 }
 
 dependencies {
+
+	// ExplorViz provides a project that contains shared source code classes for 
+	// different concerns. See:
+	// https://github.com/ExplorViz/explorviz-backend-shared
+
   	// ExplorViz config injection
   	implementation 'com.github.explorviz.explorviz-backend-shared:config-injection:master-SNAPSHOT'
   	
