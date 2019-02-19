@@ -1,6 +1,8 @@
 package net.explorviz.extension.dummy.main;
 
+import javax.inject.Inject;
 import javax.servlet.annotation.WebListener;
+import net.explorviz.extension.dummy.services.DummyService;
 import org.glassfish.jersey.server.monitoring.ApplicationEvent;
 import org.glassfish.jersey.server.monitoring.ApplicationEvent.Type;
 import org.glassfish.jersey.server.monitoring.ApplicationEventListener;
@@ -16,6 +18,9 @@ import org.slf4j.LoggerFactory;
 public class SetupApplicationListener implements ApplicationEventListener {
 
   private static final Logger LOGGER = LoggerFactory.getLogger(SetupApplicationListener.class);
+
+  @Inject
+  private DummyService dummyService;
 
   @Override
   public void onEvent(final ApplicationEvent event) {
@@ -42,6 +47,8 @@ public class SetupApplicationListener implements ApplicationEventListener {
     LOGGER.info("* * * * * * * * * * * * * * * * * * *");
 
     // add your DI injected code here for full DI context access
+    
+    dummyService.startMyDummyStuff();
 
   }
 

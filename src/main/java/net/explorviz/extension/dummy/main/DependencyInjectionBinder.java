@@ -1,5 +1,7 @@
 package net.explorviz.extension.dummy.main;
 
+import javax.inject.Singleton;
+import net.explorviz.extension.dummy.services.DummyService;
 import net.explorviz.shared.common.injection.CommonDependencyInjectionBinder;
 
 /**
@@ -13,6 +15,8 @@ public class DependencyInjectionBinder extends CommonDependencyInjectionBinder {
 
     // Common DI
     super.configure();
+
+    this.bind(DummyService.class).to(DummyService.class).in(Singleton.class);
 
   }
 }
