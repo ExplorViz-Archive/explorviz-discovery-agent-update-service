@@ -117,7 +117,7 @@ task renameProject() {
     
     // Replace dummy string in build.gradle
     file = new File("build.gradle").getText("UTF-8")
-    file = file.replaceAll(".dummy.", "." + newExtensionName + ".")
+    file = file.replaceAll("extension.dummy", "extension." + newExtensionName)
     new File(tmpDir + '/' + "build.gradle").write(file, "UTF-8")
 	
 	// java src files 
@@ -132,6 +132,7 @@ task renameProject() {
 		into baseDir
 		include '.project'
 		include 'settings.gradle'
+		include 'build.gradle'
 	}
 		
 	//cleanup
