@@ -13,4 +13,4 @@ This repository holds a dummy extension for [ExplorViz Backend](https://github.c
 7. Follow the [Backend Setup](https://github.com/ExplorViz/explorviz-backend#explorviz-backend)
 8. In Eclipse: `Import -> Gradle -> Existing Gradle Project`
 9. Start your development
-10. Start the embedded web server with Gradle task `gretty -> appStart`
+10. Start the Main class with `Right click -> Run as -> Java Application`
