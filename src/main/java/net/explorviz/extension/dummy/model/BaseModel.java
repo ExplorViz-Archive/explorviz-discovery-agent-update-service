@@ -1,31 +1,39 @@
 package net.explorviz.extension.dummy.model;
 
-import java.util.concurrent.atomic.AtomicLong;
-
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
-import com.github.jasminb.jsonapi.LongIdHandler;
 import com.github.jasminb.jsonapi.annotations.Id;
+import net.explorviz.shared.common.idgen.IdGenerator;
 
-//Needed for cyclical serialization
+// Needed for cyclical serialization
 @JsonIdentityInfo(generator = ObjectIdGenerators.StringIdGenerator.class, property = "id")
 public class BaseModel {
 
-	private static final AtomicLong ID_GENERATOR = new AtomicLong();
+  private static IdGenerator idGenerator;
 
-	@Id(LongIdHandler.class)
-	private Long id;
+  @Id
+  private String id;
 
-	public BaseModel() {
-		id = ID_GENERATOR.incrementAndGet();
-	}
+  public BaseModel() {
 
-	public long getId() {
-		return id;
-	}
+    if (idGenerator == null) {
+      throw new IllegalStateException("No id generator set. Call BaseEntity.initialize() first");
+    }
 
-	public void setId(final long id) {
-		this.id = id;
-	}
+    this.id = idGenerator.generateId();
+
+  }
+
+  public static void initialize(IdGenerator idGenerator) {
+    BaseModel.idGenerator = idGenerator;
+  }
+
+  public String getId() {
+    return this.id;
+  }
+
+  public void updateId() {
+    this.id = idGenerator.generateId();
+  }
 
 }

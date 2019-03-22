@@ -2,7 +2,9 @@ package net.explorviz.extension.dummy.main;
 
 import javax.inject.Inject;
 import javax.servlet.annotation.WebListener;
+import net.explorviz.extension.dummy.model.BaseModel;
 import net.explorviz.extension.dummy.services.DummyService;
+import net.explorviz.shared.common.idgen.IdGenerator;
 import org.glassfish.jersey.server.monitoring.ApplicationEvent;
 import org.glassfish.jersey.server.monitoring.ApplicationEvent.Type;
 import org.glassfish.jersey.server.monitoring.ApplicationEventListener;
@@ -22,6 +24,9 @@ public class SetupApplicationListener implements ApplicationEventListener {
   @Inject
   private DummyService dummyService;
 
+  @Inject
+  private IdGenerator idGenerator;
+
   @Override
   public void onEvent(final ApplicationEvent event) {
 
@@ -31,6 +36,10 @@ public class SetupApplicationListener implements ApplicationEventListener {
 
 
     if (event.getType().equals(t)) {
+
+      // start id generator
+      BaseModel.initialize(this.idGenerator);
+
       startExtension();
     }
 
@@ -47,7 +56,7 @@ public class SetupApplicationListener implements ApplicationEventListener {
     LOGGER.info("* * * * * * * * * * * * * * * * * * *");
 
     // add your DI injected code here for full DI context access
-    
+
     dummyService.startMyDummyStuff();
 
   }

@@ -1,6 +1,6 @@
 # ExplorViz Backend Dummy Extension
 
-This repository holds a dummy extension for [ExplorViz Backend](https://github.com/ExplorViz/explorviz-backend). Use it as a starting point for your future extension.
+This repository holds a dummy extension for [ExplorViz Backend](https://github.com/ExplorViz/explorviz-backend). Use it as a starting point for your future extension (microservice).
 
 ## Setup Development / Usage
 1. Clone this repository (e.g. for SSH `git clone git@github.com:ExplorViz/explorviz-backend-extension-dummy.git`)
@@ -13,4 +13,9 @@ This repository holds a dummy extension for [ExplorViz Backend](https://github.c
 7. Follow the [Backend Setup](https://github.com/ExplorViz/explorviz-backend#explorviz-backend)
 8. In Eclipse: `Import -> Gradle -> Existing Gradle Project`
 9. Start your development
-10. Start the Main class with `Right click -> Run as -> Java Application`
+10. Start the Main class with `Right click -> Run as -> Java Application` (read the section below first)
+
+## Attention
+ExplorViz services (including this dummy extension) use [Redis](https://redis.io/) as id generator for distributed and (tba) scalable services.
+For your development, you must ensure that a Redis instance is available and running on your machine.
+You can use the provided [docker-compose file](https://github.com/ExplorViz/explorviz-backend/tree/dev-1/docker-compose) for an easy setup.
