@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <projectDescription>
-	<name>explorviz-backend-extension-dummy</name>
-	<comment>Project explorviz-backend-extension-dummy created by Buildship.</comment>
+	<name>explorviz-backend-extension-discovery-agent-update-service</name>
+	<comment>Project explorviz-backend-extension-discovery-agent-update-service created by Buildship.</comment>
 	<projects>
 	</projects>
 	<buildSpec>

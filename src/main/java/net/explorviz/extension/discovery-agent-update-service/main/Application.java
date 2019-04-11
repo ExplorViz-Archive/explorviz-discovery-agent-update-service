@@ -1,8 +1,8 @@
-package net.explorviz.extension.dummy.main;
+package net.explorviz.extension.discovery-agent-update-service.main;
 
-import net.explorviz.extension.dummy.model.DummyModel;
-import net.explorviz.extension.dummy.model.SubDummyModel;
-import net.explorviz.extension.dummy.resources.TestResource;
+import net.explorviz.extension.discovery-agent-update-service.model.DummyModel;
+import net.explorviz.extension.discovery-agent-update-service.model.SubDummyModel;
+import net.explorviz.extension.discovery-agent-update-service.resources.TestResource;
 import net.explorviz.shared.common.provider.GenericTypeFinder;
 import net.explorviz.shared.common.provider.JsonApiListProvider;
 import net.explorviz.shared.common.provider.JsonApiProvider;

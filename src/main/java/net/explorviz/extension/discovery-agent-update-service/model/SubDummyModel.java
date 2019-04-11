@@ -1,4 +1,4 @@
-package net.explorviz.extension.dummy.model;
+package net.explorviz.extension.discovery-agent-update-service.model;
 
 import com.github.jasminb.jsonapi.annotations.Type;
 

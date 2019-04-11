@@ -1,9 +1,9 @@
-package net.explorviz.extension.dummy.main;
+package net.explorviz.extension.discovery-agent-update-service.main;
 
 import javax.inject.Inject;
 import javax.servlet.annotation.WebListener;
-import net.explorviz.extension.dummy.model.BaseModel;
-import net.explorviz.extension.dummy.services.DummyService;
+import net.explorviz.extension.discovery-agent-update-service.model.BaseModel;
+import net.explorviz.extension.discovery-agent-update-service.services.DummyService;
 import net.explorviz.shared.common.idgen.IdGenerator;
 import org.glassfish.jersey.server.monitoring.ApplicationEvent;
 import org.glassfish.jersey.server.monitoring.ApplicationEvent.Type;
