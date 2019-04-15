@@ -1,4 +1,4 @@
-package net.explorviz.extension.discovery-agent-update-service.services;
+package net.explorviz.extension.discovery_agent_update_service.services;
 
 import net.explorviz.shared.config.annotations.Config;
 

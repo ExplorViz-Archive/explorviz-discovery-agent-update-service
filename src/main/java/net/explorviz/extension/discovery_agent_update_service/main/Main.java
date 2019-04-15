@@ -1,4 +1,4 @@
-package net.explorviz.extension.discovery-agent-update-service.main;
+package net.explorviz.extension.discovery_agent_update_service.main;
 
 import net.explorviz.shared.config.helper.PropertyHelper;
 import org.eclipse.jetty.server.Server;

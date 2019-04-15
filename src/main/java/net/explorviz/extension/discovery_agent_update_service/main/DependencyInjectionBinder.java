@@ -1,7 +1,7 @@
-package net.explorviz.extension.discovery-agent-update-service.main;
+package net.explorviz.extension.discovery_agent_update_service.main;
 
 import javax.inject.Singleton;
-import net.explorviz.extension.discovery-agent-update-service.services.DummyService;
+import net.explorviz.extension.discovery_agent_update_service.services.DummyService;
 import net.explorviz.shared.common.injection.CommonDependencyInjectionBinder;
 
 /**

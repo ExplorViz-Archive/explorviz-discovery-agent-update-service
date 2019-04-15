@@ -1,4 +1,4 @@
-package net.explorviz.extension.discovery-agent-update-service.model;
+package net.explorviz.extension.discovery_agent_update_service.model;
 
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
