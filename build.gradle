@@ -23,7 +23,13 @@ ext {
 }
 
 dependencies {
-
+     //rule engine easy-rules
+    implementation 'org.jeasy:easy-rules-core:3.3.0'
+    implementation 'org.jeasy:easy-rules-mvel:3.3.0'
+   
+   	// https://mvnrepository.com/artifact/org.json/json
+    compile group: 'org.json', name: 'json', version: '20180813'
+   	
 	// ExplorViz provides a project that contains shared source code classes for 
 	// different concerns. See:
 	// https://github.com/ExplorViz/explorviz-backend-shared

@@ -4,6 +4,7 @@ import javax.inject.Inject;
 import javax.servlet.annotation.WebListener;
 import net.explorviz.extension.discovery_agent_update_service.model.BaseModel;
 import net.explorviz.extension.discovery_agent_update_service.services.DummyService;
+import net.explorviz.extension.discovery_agent_update_service.services.WatchService;
 import net.explorviz.shared.common.idgen.IdGenerator;
 import org.glassfish.jersey.server.monitoring.ApplicationEvent;
 import org.glassfish.jersey.server.monitoring.ApplicationEvent.Type;
@@ -58,6 +59,12 @@ public class SetupApplicationListener implements ApplicationEventListener {
     // add your DI injected code here for full DI context access
 
     dummyService.startMyDummyStuff();
+    /*
+     * Start watching for rules
+     */
+    WatchService watch = new WatchService();
+    Thread t = new Thread(watch);
+    t.start();
 
   }
 

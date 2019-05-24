@@ -2,6 +2,7 @@ package net.explorviz.extension.discovery_agent_update_service.main;
 
 
 import net.explorviz.extension.discovery_agent_update_service.model.DummyModel;
+import net.explorviz.extension.discovery_agent_update_service.model.RuleModel;
 import net.explorviz.extension.discovery_agent_update_service.model.SubDummyModel;
 import net.explorviz.extension.discovery_agent_update_service.resources.TestResource;
 import net.explorviz.shared.common.provider.GenericTypeFinder;
@@ -18,7 +19,7 @@ public class Application extends ResourceConfig {
 
     GenericTypeFinder.getTypeMap().put("DummyModel", DummyModel.class);
     GenericTypeFinder.getTypeMap().put("SubDummyModel", SubDummyModel.class);
-
+    GenericTypeFinder.getTypeMap().put("RuleModel", RuleModel.class);
     // register DI
     register(new DependencyInjectionBinder());
 

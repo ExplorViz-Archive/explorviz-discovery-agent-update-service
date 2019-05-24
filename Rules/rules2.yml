@@ -1,0 +1,9 @@
+
+---
+name: rules2
+description: when age is greater then 18, then mark as adult
+priority: 1
+condition: "person.age > 18"
+actions:
+  - "person.setAdult(true);"
+  - "System.out.println(\"It rains, take an umbrella!\");"
