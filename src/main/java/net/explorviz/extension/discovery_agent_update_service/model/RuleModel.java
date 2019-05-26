@@ -1,15 +1,18 @@
 package net.explorviz.extension.discovery_agent_update_service.model;
 
-public class RuleModel {
-public String name;
+
+
+
+public class RuleModel{
+    private String name;
 	
-	public String description;
+	private String description;
 	
-	public int priority;
+	private int priority;
 	
-	public String condition;
+	private String condition;
 	
-	public String[] actions;
+	private String[] actions;
 	
 	public String getName() {
 		return name;

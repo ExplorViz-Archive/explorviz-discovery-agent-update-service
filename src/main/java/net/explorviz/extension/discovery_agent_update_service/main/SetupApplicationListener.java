@@ -1,11 +1,15 @@
 package net.explorviz.extension.discovery_agent_update_service.main;
 
+import java.util.Timer;
+
 import javax.inject.Inject;
 import javax.servlet.annotation.WebListener;
 import net.explorviz.extension.discovery_agent_update_service.model.BaseModel;
 import net.explorviz.extension.discovery_agent_update_service.services.DummyService;
 import net.explorviz.extension.discovery_agent_update_service.services.WatchService;
 import net.explorviz.shared.common.idgen.IdGenerator;
+import net.explorviz.shared.config.annotations.Config;
+
 import org.glassfish.jersey.server.monitoring.ApplicationEvent;
 import org.glassfish.jersey.server.monitoring.ApplicationEvent.Type;
 import org.glassfish.jersey.server.monitoring.ApplicationEventListener;
@@ -21,13 +25,20 @@ import org.slf4j.LoggerFactory;
 public class SetupApplicationListener implements ApplicationEventListener {
 
   private static final Logger LOGGER = LoggerFactory.getLogger(SetupApplicationListener.class);
+  
+  @Config("watch.timer")
+  private  int time;
+  
+  private  Timer updateTimer;
+
 
   @Inject
   private DummyService dummyService;
 
   @Inject
   private IdGenerator idGenerator;
-
+  
+ 
   @Override
   public void onEvent(final ApplicationEvent event) {
 
@@ -62,9 +73,13 @@ public class SetupApplicationListener implements ApplicationEventListener {
     /*
      * Start watching for rules
      */
-    WatchService watch = new WatchService();
-    Thread t = new Thread(watch);
-    t.start();
+    LOGGER.info("Starting WatchService");
+
+    updateTimer = new Timer(true);
+    WatchService watchservice = new WatchService();
+    
+    updateTimer.scheduleAtFixedRate(watchservice, 0, time);
+
 
   }
 

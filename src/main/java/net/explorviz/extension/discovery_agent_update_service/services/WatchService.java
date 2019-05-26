@@ -6,12 +6,14 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.nio.file.*;
 import java.util.ArrayList;
+import java.util.TimerTask;
 
 import org.jeasy.rules.mvel.MVELRuleFactory;
 import org.jeasy.rules.support.YamlRuleDefinitionReader;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.slf4j.LoggerFactory;
 
 import com.fasterxml.jackson.core.JsonFactory;
 import com.fasterxml.jackson.core.JsonParseException;
@@ -20,20 +22,31 @@ import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.dataformat.yaml.YAMLFactory;
+import com.sun.media.jfxmedia.logging.Logger;
+
 
 import net.explorviz.extension.discovery_agent_update_service.model.RuleModel;
 import net.explorviz.shared.config.annotations.Config;
 
-public class WatchService implements Runnable{
-	@Config("watch.timer")
-	public static int time;
-
+public class WatchService extends TimerTask{
+	
+	private static final org.slf4j.Logger LOGGER = LoggerFactory.getLogger(WatchService.class);
 	private static ArrayList<RuleModel> ruleList;
 	private static final String pathToFolder =  "Rules" + File.separator;
+	java.nio.file.WatchService watchservice;
+	Path path;
 
 	public WatchService() {
 		ruleList = new ArrayList<RuleModel>();
 		getActList();
+		try {
+			watchservice = FileSystems.getDefault().newWatchService();
+			path = Paths.get("Rules");
+			path.register(watchservice, StandardWatchEventKinds.ENTRY_DELETE, StandardWatchEventKinds.ENTRY_CREATE);
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 
 	
@@ -44,11 +57,9 @@ public class WatchService implements Runnable{
 		try {
 			json.put(new JSONObject(jsmapper.writeValueAsString(rule)));
 		} catch (JSONException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			LOGGER.info("Invalid JSON. Check rule " + rule.getName());
 		} catch (JsonProcessingException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			LOGGER.info("Invalid JSON. Check rule " + rule.getName());
 		}
 			
 		});
@@ -64,16 +75,17 @@ public class WatchService implements Runnable{
 				RuleModel rule = newmap.readValue(new File(pathToFolder + ruleName), RuleModel.class);
 				ruleList.add(rule);
 			} catch (JsonParseException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+				LOGGER.info("The Rule " + ruleName + " seems to be invalid JSON. Please remove the file, check the content and try it again.");
 			} catch (JsonMappingException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+				LOGGER.info("The Rule " + ruleName + " seems to be invalid JSON. Please remove the file, check the content and try it again.");
 			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+				LOGGER.info("File ruleName does not exist.");
 			}
 		}
+	}
+	
+	public static ArrayList<RuleModel> ruleModelList() {
+		return ruleList;
 	}
 
 	/*
@@ -102,7 +114,7 @@ public class WatchService implements Runnable{
 		return true;
 	}
 	/*
-	 * Receive the actual list of rules.
+	 * Receive the actual list of rules in the start.
 	 */
 	public void getActList() {
 		File folder = new File("Rules");
@@ -118,32 +130,27 @@ public class WatchService implements Runnable{
 
 	@Override
 	public void run() {
-		try {
-			java.nio.file.WatchService watchservice = FileSystems.getDefault().newWatchService();
-			Path path = Paths.get("Rules");
-			// Später vielleicht interne Veränderungen von Dateien merken?
-			path.register(watchservice, StandardWatchEventKinds.ENTRY_DELETE, StandardWatchEventKinds.ENTRY_CREATE);
+		
 			WatchKey key;
-			while ((key = watchservice.take()) != null) {
-				Thread.sleep(time);
-				for (WatchEvent<?> event : key.pollEvents()) {
-					System.out.println("Event kind:" + event.kind() + ". File affected: " + event.context() + ".");
-					if (event.kind().equals(StandardWatchEventKinds.ENTRY_DELETE)) {
-						ruleDel(event.context().toString());
-					} else {
-						ruleAdd(event.context().toString());
-					}
+			try {
+				if ((key = watchservice.take()) != null) {
+					
+					for (WatchEvent<?> event : key.pollEvents()) {
+						System.out.println("Event kind:" + event.kind() + ". File affected: " + event.context() + ".");
+						if (event.kind().equals(StandardWatchEventKinds.ENTRY_DELETE)) {
+							ruleDel(event.context().toString());
+						} else {
+							ruleAdd(event.context().toString());
+						}
 
+					}
+					key.reset();
 				}
-				key.reset();
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
 			}
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+	
 
 		
 	}

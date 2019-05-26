@@ -1,5 +1,7 @@
 package net.explorviz.extension.discovery_agent_update_service.model;
 
+import java.util.ArrayList;
+
 import com.github.jasminb.jsonapi.annotations.Relationship;
 import com.github.jasminb.jsonapi.annotations.Type;
 
@@ -9,13 +11,13 @@ public class DummyModel extends BaseModel {
 	private String dummyName;
 
 	@Relationship("sub-dummy")
-	private SubDummyModel subDummy;
+	private ArrayList<SubDummyModel> subDummy;
 
 	public DummyModel() {
 		// default constructor for JSON API parsing
 	}
 
-	public DummyModel(final String dummyName, final SubDummyModel subDummy) {
+	public DummyModel(final String dummyName, final ArrayList<SubDummyModel> subDummy) {
 		this.dummyName = dummyName;
 		this.subDummy = subDummy;
 	}
@@ -28,11 +30,11 @@ public class DummyModel extends BaseModel {
 		this.dummyName = dummyName;
 	}
 
-	public SubDummyModel getSubDummy() {
+	public ArrayList<SubDummyModel> getSubDummy() {
 		return subDummy;
 	}
 
-	public void setSubDummy(final SubDummyModel subDummy) {
+	public void setSubDummy(final ArrayList<SubDummyModel> subDummy) {
 		this.subDummy = subDummy;
 	}
 
