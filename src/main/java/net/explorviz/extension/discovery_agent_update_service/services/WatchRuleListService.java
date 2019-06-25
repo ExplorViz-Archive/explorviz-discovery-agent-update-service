@@ -22,34 +22,34 @@ import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.dataformat.yaml.YAMLFactory;
-import com.sun.media.jfxmedia.logging.Logger;
+
 
 
 import net.explorviz.extension.discovery_agent_update_service.model.RuleModel;
-import net.explorviz.shared.config.annotations.Config;
 
-public class WatchService extends TimerTask{
+
+public class WatchRuleListService extends TimerTask{
 	
 	private static final org.slf4j.Logger LOGGER = LoggerFactory.getLogger(WatchService.class);
-	private static ArrayList<RuleModel> ruleList;
+	private  ArrayList<RuleModel> ruleList;
 	private static final String pathToFolder =  "Rules" + File.separator;
-	java.nio.file.WatchService watchservice;
-	Path path;
+	private static java.nio.file.WatchService watchService;
+	private static Path path;
 
-	public WatchService() {
+	public WatchRuleListService() {
 		ruleList = new ArrayList<RuleModel>();
 		getActList();
 		try {
-			watchservice = FileSystems.getDefault().newWatchService();
+			watchService = FileSystems.getDefault().newWatchService();
 			path = Paths.get("Rules");
-			path.register(watchservice, StandardWatchEventKinds.ENTRY_DELETE, StandardWatchEventKinds.ENTRY_CREATE);
+			path.register(watchService, StandardWatchEventKinds.ENTRY_DELETE, StandardWatchEventKinds.ENTRY_CREATE);
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}
 
-	
+	/*
 	public static String getList() {
 		JSONArray json = new JSONArray();
 		ObjectMapper jsmapper = new ObjectMapper(new JsonFactory());
@@ -65,8 +65,8 @@ public class WatchService extends TimerTask{
 		});
 		return json.toString();
 	}
-
-	public static void ruleAdd(String ruleName) {
+*/
+	public  void ruleAdd(String ruleName) {
 		if (checkValidity(ruleName)) {
 			ObjectMapper newmap = new ObjectMapper(new YAMLFactory());
 			newmap.enable(SerializationFeature.INDENT_OUTPUT);
@@ -79,19 +79,24 @@ public class WatchService extends TimerTask{
 			} catch (JsonMappingException e) {
 				LOGGER.info("The Rule " + ruleName + " seems to be invalid JSON. Please remove the file, check the content and try it again.");
 			} catch (IOException e) {
-				LOGGER.info("File ruleName does not exist.");
+				LOGGER.info("File "+ ruleName +  " does not exist.");
 			}
 		}
 	}
 	
-	public static ArrayList<RuleModel> ruleModelList() {
-		return ruleList;
+	public ArrayList<RuleModel> getRules() {
+		ArrayList<RuleModel> rules;
+		synchronized(ruleList) {
+			rules = ruleList;
+		}
+		
+		return rules;
 	}
 
 	/*
 	 * Removes the specific rule
 	 */
-	public static void ruleDel(String ruleName) {
+	public void ruleDel(String ruleName) {
 		String name = ruleName.replace(".yml", "");
 		ruleList.removeIf(rule -> rule.getName().equals(name));
 	}
@@ -99,12 +104,12 @@ public class WatchService extends TimerTask{
 	/*
 	 * Check the validity of a rule, by trying to create it.
 	 */
-	public static boolean checkValidity(String ruleName) {
+	public boolean checkValidity(String ruleName) {
 		MVELRuleFactory ruleFactory = new MVELRuleFactory(new YamlRuleDefinitionReader());
 		try {
 			ruleFactory.createRule(new FileReader(pathToFolder + ruleName));
 		} catch (FileNotFoundException e) {
-			System.out.println("Looks like the File does not exist");
+			System.out.println("Looks like the File does not exist.");
 			return false;
 
 		} catch (Exception e) {
@@ -133,7 +138,7 @@ public class WatchService extends TimerTask{
 		
 			WatchKey key;
 			try {
-				if ((key = watchservice.take()) != null) {
+				if ((key = watchService.take()) != null) {
 					
 					for (WatchEvent<?> event : key.pollEvents()) {
 						System.out.println("Event kind:" + event.kind() + ". File affected: " + event.context() + ".");

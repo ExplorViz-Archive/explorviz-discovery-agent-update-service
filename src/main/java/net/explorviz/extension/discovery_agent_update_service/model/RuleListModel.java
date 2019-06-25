@@ -9,20 +9,23 @@ import com.github.jasminb.jsonapi.annotations.Type;
 public class RuleListModel extends BaseModel{
 
 
-	private ArrayList<RuleModel> rulelist;
+	private ArrayList<RuleModel> ruleList;
 	
 	
-	public RuleListModel() {
-		
+	public RuleListModel(ArrayList<RuleModel> rules) {
+		ruleList = rules;
 	}
-	
-	public void setRuleList(ArrayList<RuleModel> rules) {
-		rulelist = rules;
+	public ArrayList<RuleModel> getRuleList() {
+		return ruleList;
 	}
-	
-	public ArrayList<RuleModel> getRuleList(){
-		return rulelist;
+
+
+	public void setRuleList(ArrayList<RuleModel> ruleList) {
+		this.ruleList = ruleList;
 	}
+
+	
+
 	
 	
 }

@@ -1,9 +1,7 @@
 package net.explorviz.extension.discovery_agent_update_service.main;
-
 import javax.inject.Singleton;
 
-import net.explorviz.extension.discovery_agent_update_service.model.RuleListModel;
-import net.explorviz.extension.discovery_agent_update_service.services.DummyService;
+import net.explorviz.extension.discovery_agent_update_service.services.WatchRuleListService;
 import net.explorviz.shared.common.injection.CommonDependencyInjectionBinder;
 
 /**
@@ -18,7 +16,7 @@ public class DependencyInjectionBinder extends CommonDependencyInjectionBinder {
     // Common DI
     super.configure();
 
-    this.bind(DummyService.class).to(DummyService.class).in(Singleton.class);
+    this.bind(WatchRuleListService.class).to(WatchRuleListService.class).in(Singleton.class);
     
 
   }

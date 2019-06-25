@@ -1,12 +1,12 @@
 package net.explorviz.extension.discovery_agent_update_service.main;
 
+
 import java.util.Timer;
 
 import javax.inject.Inject;
 import javax.servlet.annotation.WebListener;
 import net.explorviz.extension.discovery_agent_update_service.model.BaseModel;
-import net.explorviz.extension.discovery_agent_update_service.services.DummyService;
-import net.explorviz.extension.discovery_agent_update_service.services.WatchService;
+import net.explorviz.extension.discovery_agent_update_service.services.WatchRuleListService;
 import net.explorviz.shared.common.idgen.IdGenerator;
 import net.explorviz.shared.config.annotations.Config;
 
@@ -33,7 +33,7 @@ public class SetupApplicationListener implements ApplicationEventListener {
 
 
   @Inject
-  private DummyService dummyService;
+  private WatchRuleListService watchService;
 
   @Inject
   private IdGenerator idGenerator;
@@ -69,16 +69,15 @@ public class SetupApplicationListener implements ApplicationEventListener {
 
     // add your DI injected code here for full DI context access
 
-    dummyService.startMyDummyStuff();
     /*
      * Start watching for rules
      */
     LOGGER.info("Starting WatchService");
 
     updateTimer = new Timer(true);
-    WatchService watchservice = new WatchService();
+ //   WatchRuleListService watchservice = new WatchRuleListService();
     
-    updateTimer.scheduleAtFixedRate(watchservice, 0, time);
+    updateTimer.scheduleAtFixedRate(watchService, 0, time);
 
 
   }
