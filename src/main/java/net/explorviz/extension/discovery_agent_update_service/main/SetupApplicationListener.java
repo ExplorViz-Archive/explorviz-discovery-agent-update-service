@@ -75,8 +75,6 @@ public class SetupApplicationListener implements ApplicationEventListener {
     LOGGER.info("Starting WatchService");
 
     updateTimer = new Timer(true);
- //   WatchRuleListService watchservice = new WatchRuleListService();
-    
     updateTimer.scheduleAtFixedRate(watchService, 0, time);
 
 

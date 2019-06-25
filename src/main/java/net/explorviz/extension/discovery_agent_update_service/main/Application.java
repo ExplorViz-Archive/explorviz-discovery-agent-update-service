@@ -2,7 +2,7 @@ package net.explorviz.extension.discovery_agent_update_service.main;
 
 
 import net.explorviz.extension.discovery_agent_update_service.model.RuleListModel;
-import net.explorviz.extension.discovery_agent_update_service.resources.TestResource;
+import net.explorviz.extension.discovery_agent_update_service.resources.RuleResource;
 import net.explorviz.shared.common.provider.GenericTypeFinder;
 import net.explorviz.shared.common.provider.JsonApiListProvider;
 import net.explorviz.shared.common.provider.JsonApiProvider;
@@ -29,7 +29,7 @@ public class Application extends ResourceConfig {
     this.register(JsonApiListProvider.class);
 
     // register all resources in the given package
-    register(TestResource.class);
+    register(RuleResource.class);
     
     // Starting point for your DI-based extension
     this.register(SetupApplicationListener.class);

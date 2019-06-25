@@ -14,7 +14,7 @@ import net.explorviz.extension.discovery_agent_update_service.services.WatchRule
 @Path("test")
 // @RolesAllowed({"admin"})
 @PermitAll
-public class TestResource {
+public class RuleResource {
 
   // Access annotations can also be applied at method level
 
