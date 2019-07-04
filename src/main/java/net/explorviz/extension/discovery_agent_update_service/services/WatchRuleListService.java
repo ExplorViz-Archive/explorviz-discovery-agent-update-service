@@ -1,5 +1,10 @@
 package net.explorviz.extension.discovery_agent_update_service.services;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.SerializationFeature;
+import com.fasterxml.jackson.core.JsonParseException;
+import com.fasterxml.jackson.dataformat.yaml.YAMLFactory;
+import com.fasterxml.jackson.databind.JsonMappingException;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
@@ -9,23 +14,18 @@ import java.util.ArrayList;
 import java.util.TimerTask;
 import org.jeasy.rules.mvel.MVELRuleFactory;
 import org.jeasy.rules.support.YamlRuleDefinitionReader;
-import org.slf4j.LoggerFactory;
-import com.fasterxml.jackson.core.JsonParseException;
-import com.fasterxml.jackson.databind.JsonMappingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.SerializationFeature;
-import com.fasterxml.jackson.dataformat.yaml.YAMLFactory;
-
-
-
 import net.explorviz.extension.discovery_agent_update_service.model.RuleModel;
+import org.slf4j.LoggerFactory;	
+/**
+ * Watchs the rulefolder and updates the rulelist
+ * @author enes
+ *
+ */
+public class WatchRuleListService extends TimerTask {
 
-
-public class WatchRuleListService extends TimerTask{
-	
 	private static final org.slf4j.Logger LOGGER = LoggerFactory.getLogger(WatchService.class);
-	private  ArrayList<RuleModel> ruleList;
-	private static final String pathToFolder =  "Rules" + File.separator;
+	private ArrayList<RuleModel> ruleList;
+	private static final String pathToFolder = "Rules" + File.separator;
 	private static WatchService watchService;
 	private static Path path;
 
@@ -35,14 +35,15 @@ public class WatchRuleListService extends TimerTask{
 		try {
 			watchService = FileSystems.getDefault().newWatchService();
 			path = Paths.get("Rules");
-			path.register(watchService, StandardWatchEventKinds.ENTRY_DELETE, StandardWatchEventKinds.ENTRY_CREATE, StandardWatchEventKinds.ENTRY_MODIFY);
+			path.register(watchService, StandardWatchEventKinds.ENTRY_DELETE, StandardWatchEventKinds.ENTRY_CREATE,
+					StandardWatchEventKinds.ENTRY_MODIFY);
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}
 
-	public  void ruleAdd(String ruleName) {
+	public void ruleAdd(String ruleName) {
 		if (checkValidity(ruleName)) {
 			ObjectMapper newmap = new ObjectMapper(new YAMLFactory());
 			newmap.enable(SerializationFeature.INDENT_OUTPUT);
@@ -51,21 +52,23 @@ public class WatchRuleListService extends TimerTask{
 				RuleModel rule = newmap.readValue(new File(pathToFolder + ruleName), RuleModel.class);
 				ruleList.add(rule);
 			} catch (JsonParseException e) {
-				LOGGER.info("The Rule " + ruleName + " seems to be invalid JSON. Please remove the file, check the content and try it again.");
+				LOGGER.info("The Rule " + ruleName
+						+ " seems to be invalid JSON. Please remove the file, check the content and try it again.");
 			} catch (JsonMappingException e) {
-				LOGGER.info("The Rule " + ruleName + " seems to be invalid JSON. Please remove the file, check the content and try it again.");
+				LOGGER.info("The Rule " + ruleName
+						+ " seems to be invalid JSON. Please remove the file, check the content and try it again.");
 			} catch (IOException e) {
-				LOGGER.info("File "+ ruleName +  " does not exist.");
+				LOGGER.info("File " + ruleName + " does not exist.");
 			}
 		}
 	}
-	
+
 	public ArrayList<RuleModel> getRules() {
 		ArrayList<RuleModel> rules;
-		synchronized(ruleList) {
+		synchronized (ruleList) {
 			rules = ruleList;
 		}
-		
+
 		return rules;
 	}
 
@@ -94,6 +97,7 @@ public class WatchRuleListService extends TimerTask{
 		}
 		return true;
 	}
+
 	/*
 	 * Receive the actual list of rules in the start.
 	 */
@@ -108,34 +112,33 @@ public class WatchRuleListService extends TimerTask{
 
 		}
 	}
-	
+
 	@Override
 	public void run() {
-			WatchKey key;
-			try {
-				if ((key = watchService.take()) != null) {
-					
-					for (WatchEvent<?> event : key.pollEvents()) {
-						//System.out.println("Event kind:" + event.kind() + ". File affected: " + event.context() + ".");
-						if (event.kind().equals(StandardWatchEventKinds.ENTRY_DELETE)) {
-							ruleDel(event.context().toString());
-						} else if(event.kind().equals(StandardWatchEventKinds.ENTRY_CREATE)){
-							ruleAdd(event.context().toString());
-						}else if(event.kind().equals(StandardWatchEventKinds.ENTRY_MODIFY)) {
-							ruleDel(event.context().toString());
-							ruleAdd(event.context().toString());
-						}
+		WatchKey key;
+		try {
+			if ((key = watchService.take()) != null) {
 
+				for (WatchEvent<?> event : key.pollEvents()) {
+					// System.out.println("Event kind:" + event.kind() + ". File affected: " +
+					// event.context() + ".");
+					if (event.kind().equals(StandardWatchEventKinds.ENTRY_DELETE)) {
+						ruleDel(event.context().toString());
+					} else if (event.kind().equals(StandardWatchEventKinds.ENTRY_CREATE)) {
+						ruleAdd(event.context().toString());
+					} else if (event.kind().equals(StandardWatchEventKinds.ENTRY_MODIFY)) {
+						ruleDel(event.context().toString());
+						ruleAdd(event.context().toString());
 					}
-					key.reset();
-				}
-			} catch (InterruptedException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-	
 
-		
+				}
+				key.reset();
+			}
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
 	}
 
 }
