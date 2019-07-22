@@ -28,41 +28,57 @@ public class WatchRuleListService extends TimerTask {
 	private static final String pathToFolder = "Rules" + File.separator;
 	private static WatchService watchService;
 	private static Path path;
-
+	
 	public WatchRuleListService() {
-		ruleList = new ArrayList<RuleModel>();
-		getActList();
+		 new File("Rules").mkdir();
+		 ruleList = new ArrayList<RuleModel>();
 		try {
 			watchService = FileSystems.getDefault().newWatchService();
 			path = Paths.get("Rules");
 			path.register(watchService, StandardWatchEventKinds.ENTRY_DELETE, StandardWatchEventKinds.ENTRY_CREATE,
 					StandardWatchEventKinds.ENTRY_MODIFY);
+			getActList();
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			LOGGER.error("Can't create folder Rules.");
+			
 		}
 	}
 
-	public void ruleAdd(String ruleName) {
-		if (checkValidity(ruleName)) {
+	public void ruleAdd(String fileName) {
+		final String ruleName = fileName.replace(".yml", "");
+		if (checkValidity(fileName)) {
 			ObjectMapper newmap = new ObjectMapper(new YAMLFactory());
 			newmap.enable(SerializationFeature.INDENT_OUTPUT);
-
+			/*
+			 * Change name of rule to filename, should the name of the rule is not equal to the filename.
+			 * Reason: rules in a rulebase need unambiguous names, otherwise the rule engine will throw exceptions.
+			 */
+		
 			try {
-				RuleModel rule = newmap.readValue(new File(pathToFolder + ruleName), RuleModel.class);
+				RuleModel rule = newmap.readValue(new File(pathToFolder + fileName), RuleModel.class);
+				if(rule.getName().toLowerCase().equals(ruleName)) {
 				ruleList.add(rule);
+				}else {
+					LOGGER.info("The filename " + fileName + " did not match with the name of the rule."
+							+ " Changed rule name to the filename.");
+					rule.setName(ruleName);
+					ruleList.add(rule);
+				}
 			} catch (JsonParseException e) {
-				LOGGER.info("The Rule " + ruleName
+				LOGGER.error("The Rule " + fileName
 						+ " seems to be invalid JSON. Please remove the file, check the content and try it again.");
 			} catch (JsonMappingException e) {
-				LOGGER.info("The Rule " + ruleName
+				LOGGER.error("The Rule " + fileName
 						+ " seems to be invalid JSON. Please remove the file, check the content and try it again.");
 			} catch (IOException e) {
-				LOGGER.info("File " + ruleName + " does not exist.");
+				LOGGER.error("File " + fileName + " does not exist.");
 			}
 		}
 	}
-
+/**
+ * 
+ * @returns ruleList. 
+ */
 	public ArrayList<RuleModel> getRules() {
 		ArrayList<RuleModel> rules;
 		synchronized (ruleList) {
@@ -72,16 +88,19 @@ public class WatchRuleListService extends TimerTask {
 		return rules;
 	}
 
-	/*
-	 * Removes the specific rule
+	/**
+	 * Removes rules in the ruleList.
+	 * @param ruleName of the rule that has to be eliminated.
 	 */
 	public void ruleDel(String ruleName) {
 		String name = ruleName.replace(".yml", "");
 		ruleList.removeIf(rule -> rule.getName().equals(name));
 	}
 
-	/*
-	 * Check the validity of a rule, by trying to create it.
+	/**
+	 * Checks the validity of a rule. 
+	 * @param ruleName of the rule that has to be checked.
+	 * @returns true if its a valid rule, otherwise it will throw a exception
 	 */
 	public boolean checkValidity(String ruleName) {
 		MVELRuleFactory ruleFactory = new MVELRuleFactory(new YamlRuleDefinitionReader());
@@ -98,13 +117,12 @@ public class WatchRuleListService extends TimerTask {
 		return true;
 	}
 
-	/*
-	 * Receive the actual list of rules in the start.
+	/**
+	 * Adds all rules found in the Rules folder. 
 	 */
 	public void getActList() {
 		File folder = new File("Rules");
 		File[] listOfFiles = folder.listFiles();
-
 		for (int i = 0; i < listOfFiles.length; i++) {
 			String name = listOfFiles[i].getName();
 
@@ -120,8 +138,6 @@ public class WatchRuleListService extends TimerTask {
 			if ((key = watchService.take()) != null) {
 
 				for (WatchEvent<?> event : key.pollEvents()) {
-					// System.out.println("Event kind:" + event.kind() + ". File affected: " +
-					// event.context() + ".");
 					if (event.kind().equals(StandardWatchEventKinds.ENTRY_DELETE)) {
 						ruleDel(event.context().toString());
 					} else if (event.kind().equals(StandardWatchEventKinds.ENTRY_CREATE)) {
@@ -135,8 +151,7 @@ public class WatchRuleListService extends TimerTask {
 				key.reset();
 			}
 		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+		LOGGER.error("The watchservice does not work. Please restart.");
 		}
 
 	}

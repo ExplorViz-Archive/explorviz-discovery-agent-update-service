@@ -29,7 +29,6 @@ public class RuleResource {
   public RuleListModel getRuleList() {
 	  
 	  RuleListModel rulelist = new RuleListModel(watchService.getRules());
-	 rulelist.getRuleList().forEach(a -> System.out.println(a.getName()));
 
 	  return rulelist;
 	  

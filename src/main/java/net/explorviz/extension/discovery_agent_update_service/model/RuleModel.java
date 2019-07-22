@@ -1,8 +1,6 @@
 package net.explorviz.extension.discovery_agent_update_service.model;
 
 
-
-
 public class RuleModel{
     private String name;
 	
