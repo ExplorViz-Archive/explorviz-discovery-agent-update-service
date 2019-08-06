@@ -1,56 +1,61 @@
 package net.explorviz.extension.discovery_agent_update_service.model;
 
+/**
+ * POJO, representing a Rule.
+ *
+ *
+ */
+public class RuleModel {
 
-public class RuleModel{
-    private String name;
-	
-	private String description;
-	
-	private int priority;
-	
-	private String condition;
-	
-	private String[] actions;
-	
-	public String getName() {
-		return name;
-	}
+  private String name;
 
-	public void setName(String name) {
-		this.name = name;
-	}
+  private String description;
 
-	public String getDescription() {
-		return description;
-	}
+  private int priority;
 
-	public void setDescription(String description) {
-		this.description = description;
-	}
+  private String condition;
 
-	public int getPriority() {
-		return priority;
-	}
+  private String[] actions;
 
-	public void setPriority(int priority) {
-		this.priority = priority;
-	}
+  public String getName() {
+    return this.name;
+  }
 
-	public String getCondition() {
-		return condition;
-	}
+  public void setName(final String name) {
+    this.name = name;
+  }
 
-	public void setCondition(String condition) {
-		this.condition = condition;
-	}
+  public String getDescription() {
+    return this.description;
+  }
 
-	public String[] getActions() {
-		return actions;
-	}
+  public void setDescription(final String description) {
+    this.description = description;
+  }
 
-	public void setActions(String[] actions) {
-		this.actions = actions;
-	}
+  public int getPriority() {
+    return this.priority;
+  }
+
+  public void setPriority(final int priority) {
+    this.priority = priority;
+  }
+
+  public String getCondition() {
+    return this.condition;
+  }
+
+  public void setCondition(final String condition) {
+    this.condition = condition;
+  }
+
+  public String[] getActions() {
+    return this.actions;
+  }
+
+  public void setActions(final String[] actions) {
+    this.actions = actions;
+  }
 
 
 }

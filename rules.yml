@@ -1,9 +1,0 @@
-
----
-name: les
-description: DÖNER LECKER FRESSEN  AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
-priority: 1
-condition: "person.age > 18"
-actions:
-  - "person.setAdult(true);"
-  - "System.out.println(\"It rains, take an umbrella!\");"

@@ -20,8 +20,6 @@ public final class Main {
 
   private Main() {
     // utility class
-	  
-	  
   }
 
   /**
@@ -32,11 +30,11 @@ public final class Main {
    */
   public static void main(final String[] args) {
 
-    int port = getPort();
+    final int port = getPort();
 
     final Server server = new Server(port);
 
-    String contextPath = getContextPath();
+    final String contextPath = getContextPath();
 
     final ServletHolder jerseyServlet = new ServletHolder(new ServletContainer(createJaxRsApp()));
     final ServletContextHandler context = new ServletContextHandler(server, contextPath);

@@ -22,7 +22,9 @@ buildscript {
   }
 }
 
-
+dependencies {
+   runtime files(org.gradle.internal.jvm.Jvm.current().toolsJar)
+}
 repositories {
     jcenter()
     maven { url 'https://jitpack.io' }
@@ -40,6 +42,14 @@ ext {
 }
 
 dependencies {
+
+    testCompile group: 'org.junit.jupiter', name: 'junit-jupiter-api', version: '5.5.1'
+
+	testImplementation 'org.junit.platform:junit-platform-runner:1.5.1'
+	testCompile group: 'org.junit.platform', name: 'junit-platform-launcher', version: '1.5.1'
+	testImplementation group: 'org.junit.vintage', name: 'junit-vintage-engine', version: '5.4.0'
+	testImplementation 'org.mockito:mockito-core:2.24.0'	
+	testImplementation group: 'org.mockito', name: 'mockito-junit-jupiter', version: '2.27.0'
      //rule engine easy-rules
     implementation 'org.jeasy:easy-rules-core:3.3.0'
     implementation 'org.jeasy:easy-rules-mvel:3.3.0'
@@ -67,8 +77,9 @@ dependencies {
   	// ExplorViz landscape model
   	//implementation "com.github.explorviz.explorviz-backend-shared:landscape-model:${explorvizSharedVersion}"
 	
-    // Use JUnit test framework
-    testImplementation 'junit:junit:4.12'
+ 
+// Testing and Mocking
+	
 }
 
 // Disable standard Jar build and
