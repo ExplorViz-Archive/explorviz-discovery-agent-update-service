@@ -2,14 +2,12 @@ package net.explorviz.extension.discovery_agent_update_service.main;
 
 
 import java.util.Timer;
-
 import javax.inject.Inject;
 import javax.servlet.annotation.WebListener;
 import net.explorviz.extension.discovery_agent_update_service.model.BaseModel;
 import net.explorviz.extension.discovery_agent_update_service.services.WatchRuleListService;
 import net.explorviz.shared.common.idgen.IdGenerator;
 import net.explorviz.shared.config.annotations.Config;
-
 import org.glassfish.jersey.server.monitoring.ApplicationEvent;
 import org.glassfish.jersey.server.monitoring.ApplicationEvent.Type;
 import org.glassfish.jersey.server.monitoring.ApplicationEventListener;
@@ -25,11 +23,11 @@ import org.slf4j.LoggerFactory;
 public class SetupApplicationListener implements ApplicationEventListener {
 
   private static final Logger LOGGER = LoggerFactory.getLogger(SetupApplicationListener.class);
-  
+
   @Config("watch.timer")
-  private  int time;
-  
-  private  Timer updateTimer;
+  private int time;
+
+  private Timer updateTimer;
 
 
   @Inject
@@ -37,8 +35,8 @@ public class SetupApplicationListener implements ApplicationEventListener {
 
   @Inject
   private IdGenerator idGenerator;
-  
- 
+
+
   @Override
   public void onEvent(final ApplicationEvent event) {
 
@@ -52,7 +50,7 @@ public class SetupApplicationListener implements ApplicationEventListener {
       // start id generator
       BaseModel.initialize(this.idGenerator);
 
-      startExtension();
+      this.startExtension();
     }
 
   }
@@ -73,9 +71,10 @@ public class SetupApplicationListener implements ApplicationEventListener {
      * Start watching for rules
      */
     LOGGER.info("Starting WatchService");
+    this.watchService.watchRuleListServiceStart("Rules");
 
-    updateTimer = new Timer(true);
-    updateTimer.scheduleAtFixedRate(watchService, 0, time);
+    this.updateTimer = new Timer(true);
+    this.updateTimer.scheduleAtFixedRate(this.watchService, 0, this.time);
 
 
   }

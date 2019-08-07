@@ -30,17 +30,23 @@ public class WatchRuleListService extends TimerTask {
 
   private static final org.slf4j.Logger LOGGER =
       LoggerFactory.getLogger(WatchRuleListService.class);
-  private static final String DIRECTORY = "Rules";
-  private static final String PATH_DIRECTORY = DIRECTORY + File.separator;
+  public static String DIRECTORY = "Rules";
+  private static String PATH_DIRECTORY = DIRECTORY + File.separator;
   private static final String YML = ".yml";
   private WatchService watchService;
   private static ArrayList<RuleModel> ruleList;
 
 
+
   /**
    * Class for checking a directory, containing a list of rules.
    */
-  public WatchRuleListService() {
+
+  public void watchRuleListServiceStart(final String directory) {
+    if (directory != null || directory.equals("")) {
+      WatchRuleListService.DIRECTORY = directory;
+      PATH_DIRECTORY = directory + File.separator;
+    }
     // To be sure we have a Rules folder
     new File(DIRECTORY).mkdir();
     WatchRuleListService.ruleList = new ArrayList<>();
@@ -62,7 +68,7 @@ public class WatchRuleListService extends TimerTask {
    * @param fileName that has to be
    */
   public void ruleAdd(final String fileName) {
-    LOGGER.error("Go into ADD for: " + fileName);
+
     final String ruleName = fileName.replace(YML, "");
     if (this.checkValidity(fileName)) {
       final ObjectMapper newmap = new ObjectMapper(new YAMLFactory());
@@ -72,7 +78,7 @@ public class WatchRuleListService extends TimerTask {
        * Reason: rules in a rulebase need unambiguous names, otherwise the rule engine will throw
        * exceptions or ignore of the rules.
        */
-      LOGGER.info("Adding : " + fileName);
+      LOGGER.info("Adding " + fileName + " into " + DIRECTORY + ".");
       try {
         final RuleModel rule =
             newmap.readValue(new File(PATH_DIRECTORY + fileName), RuleModel.class);
@@ -113,7 +119,7 @@ public class WatchRuleListService extends TimerTask {
    */
   public void ruleDel(final String ruleName) {
     final String name = ruleName.replace(YML, "");
-    LOGGER.info("Remove : " + ruleName);
+    LOGGER.info("Remove " + ruleName + " from " + DIRECTORY + ".");
     WatchRuleListService.ruleList.removeIf(rule -> rule.getName().equals(name));
   }
 
@@ -124,6 +130,7 @@ public class WatchRuleListService extends TimerTask {
    * @returns true if its a valid rule, otherwise it will throw a exception
    */
   public boolean checkValidity(final String ruleName) {
+
     final MVELRuleFactory ruleFactory = new MVELRuleFactory(new YamlRuleDefinitionReader());
     try {
 
@@ -136,7 +143,6 @@ public class WatchRuleListService extends TimerTask {
       LOGGER.info("Please check rule " + ruleName + ". Seems to be a invalid rule.");
       return false;
     }
-
     return true;
   }
 
@@ -162,13 +168,13 @@ public class WatchRuleListService extends TimerTask {
       if ((key = this.watchService.take()) != null) {
         for (final WatchEvent<?> event : key.pollEvents()) {
           if (event.kind().equals(StandardWatchEventKinds.ENTRY_DELETE)) {
-            LOGGER.info("DELETE");
+
             this.ruleDel(event.context().toString());
           } else if (event.kind().equals(StandardWatchEventKinds.ENTRY_CREATE)) {
-            LOGGER.info("CREATE");
+
             this.ruleAdd(event.context().toString());
           } else if (event.kind().equals(StandardWatchEventKinds.ENTRY_MODIFY)) {
-            LOGGER.info("MODIFY");
+
             this.ruleDel(event.context().toString());
             this.ruleAdd(event.context().toString());
           }

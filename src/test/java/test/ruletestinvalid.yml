@@ -1,0 +1,8 @@
+
+---
+name: ruletestinvalid
+description: DÖNER LECKER FRESSEN  
+condition: "person.age > 18"
+actions:
+  "person.setAdult(true);"
+  - "System.out.println(\"It rains, take an umbrella!\");"
