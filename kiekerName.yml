@@ -1,0 +1,9 @@
+
+---
+name: kiekerAppAOP+CMD
+description: Changes the aop.xml and proposes a execution command of a the sampleApplication.
+priority: 5
+condition: "processInfo.getOsExecutionCommand()!= null && processInfo.getOsExecutionCommand().toLowerCase().contains(\"sample\") && processInfo.getWorkingDirectory() != null;"
+actions:
+  - "processInfo.setName(\"KiekerSampleApp\");"
+ 

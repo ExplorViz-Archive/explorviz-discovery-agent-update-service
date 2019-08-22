@@ -10,7 +10,6 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
-import java.util.ArrayList;
 import java.util.Timer;
 import net.explorviz.extension.discovery_agent_update_service.model.RuleModel;
 import net.explorviz.extension.discovery_agent_update_service.services.WatchRuleListService;
@@ -85,11 +84,13 @@ public class WatchRuleListServiceTest {
     }
     final WatchRuleListService service = new WatchRuleListService();
     service.watchRuleListServiceStart(TEST_DIRECTORY);
-    final ArrayList<RuleModel> rules = service.getRules();
+    final Object[] rules = service.getRules();
+
     boolean test = false;
-    for (int i = 0; i < rules.size(); i++) {
-      if (rules.get(i).getName().equals("ruletest")) {
+    for (final Object rule : rules) {
+      if (((RuleModel) rule).getName().equals("ruletest")) {
         test = true;
+        break;
       }
     }
     assertTrue(test);
@@ -109,13 +110,12 @@ public class WatchRuleListServiceTest {
     }
     final WatchRuleListService service = new WatchRuleListService();
     service.watchRuleListServiceStart(TEST_DIRECTORY);
-    final ArrayList<RuleModel> rules = service.getRules();
-    boolean test = false;
-    for (int i = 0; i < rules.size(); i++) {
-      if (rules.get(i).getName().equals("ruletestinvalid")) {
+    final Object[] rules = service.getRules();
 
+    boolean test = false;
+    for (final Object rule : rules) {
+      if (((RuleModel) rule).getName().equals("ruletestinvalid")) {
         test = true;
-        break;
       }
     }
     assertFalse(test);
@@ -171,11 +171,10 @@ public class WatchRuleListServiceTest {
           "Copy file ruletestinvalid failed. Problem testing in WatchRuleListService: testwatchInitiation.");
     }
     service.ruleAdd(INVALID_RULE_NAME);
-    final ArrayList<RuleModel> rules = service.getRules();
+    final Object[] rules = service.getRules();
     boolean test = false;
-    for (int i = 0; i < rules.size(); i++) {
-      if (rules.get(i).getName().equals("ruletestinvalid")) {
-
+    for (final Object rule : rules) {
+      if (((RuleModel) rule).getName().equals("ruletestinvalid")) {
         test = true;
         break;
       }
@@ -207,12 +206,13 @@ public class WatchRuleListServiceTest {
       LOGGER.error("Failed to sleep thread");
     }
     // service.ruleAdd("ruletest.yml");
-    final ArrayList<RuleModel> rules = service.getRules();
-    boolean test = false;
-    for (int i = 0; i < rules.size(); i++) {
-      if (rules.get(i).getName().equals("ruletest")) {
+    final Object[] rules = service.getRules();
 
+    boolean test = false;
+    for (final Object rule : rules) {
+      if (((RuleModel) rule).getName().equals("ruletest")) {
         test = true;
+        break;
       }
     }
     assertTrue(test);
@@ -229,7 +229,12 @@ public class WatchRuleListServiceTest {
     } catch (final InterruptedException e) {
       LOGGER.error("Failed to sleep thread.");
     }
-    service.getRules().forEach(rule -> assertFalse(rule.getName().equals("rulestest")));
+    final Object[] rulesSecond = service.getRules();
+
+    for (final Object rule : rulesSecond) {
+      assertFalse(((RuleModel) rule).getName().equals("ruletest"));
+
+    }
 
   }
 

@@ -27,6 +27,9 @@ public class SetupApplicationListener implements ApplicationEventListener {
   @Config("watch.timer")
   private int time;
 
+  @Config("watch.directory")
+  private String directory;
+
   private Timer updateTimer;
 
 
@@ -62,7 +65,7 @@ public class SetupApplicationListener implements ApplicationEventListener {
 
   private void startExtension() {
     LOGGER.info("* * * * * * * * * * * * * * * * * * *\n");
-    LOGGER.info("Dummy Extension Servlet initialized.\n");
+    LOGGER.info("Update-Service Extension Servlet initialized.\n");
     LOGGER.info("* * * * * * * * * * * * * * * * * * *");
 
     // add your DI injected code here for full DI context access
@@ -71,7 +74,7 @@ public class SetupApplicationListener implements ApplicationEventListener {
      * Start watching for rules
      */
     LOGGER.info("Starting WatchService");
-    this.watchService.watchRuleListServiceStart("Rules");
+    this.watchService.watchRuleListServiceStart(this.directory);
 
     this.updateTimer = new Timer(true);
     this.updateTimer.scheduleAtFixedRate(this.watchService, 0, this.time);
