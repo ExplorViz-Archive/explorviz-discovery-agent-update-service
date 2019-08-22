@@ -18,6 +18,7 @@ import java.nio.file.WatchService;
 import java.util.HashMap;
 import java.util.TimerTask;
 import net.explorviz.extension.discovery_agent_update_service.model.RuleModel;
+import org.jeasy.rules.api.Rule;
 import org.jeasy.rules.mvel.MVELRuleFactory;
 import org.jeasy.rules.support.YamlRuleDefinitionReader;
 import org.slf4j.LoggerFactory;
@@ -39,13 +40,14 @@ public class WatchRuleListService extends TimerTask {
 
 	public void watchRuleListServiceStart(final String directory) {
 
-		System.out.println(new File(directory).isDirectory());
-		if (directory != null && !directory.equals("") && new File(directory).isDirectory()) {
+		final File test = new File(directory);
+		if (directory != null && !directory.equals("") && test.isDirectory()) {
 			PATH_DIRECTORY = directory;
 			PATH_DIRECTORY_EXT = directory + File.separator;
 		}
+
 		// To be sure we have a Rules folder
-		new File(PATH_DIRECTORY).mkdir();
+		// new File(PATH_DIRECTORY).mkdir();
 		// Check already Existing files
 		this.checkActList();
 		try {
@@ -70,6 +72,7 @@ public class WatchRuleListService extends TimerTask {
 		if (this.checkValidity(fileName)) {
 			final ObjectMapper newmap = new ObjectMapper(new YAMLFactory());
 			newmap.enable(SerializationFeature.INDENT_OUTPUT);
+
 			/*
 			 * Change name of rule to filename, should the name of the rule is not equal to
 			 * the filename. Reason: rules in a rulebase need unambiguous names, otherwise
@@ -78,7 +81,9 @@ public class WatchRuleListService extends TimerTask {
 			LOGGER.info("Adding " + fileName + " from directory " + PATH_DIRECTORY + ".");
 			try {
 				final RuleModel rule = newmap.readValue(new File(PATH_DIRECTORY_EXT + fileName), RuleModel.class);
-				WatchRuleListService.ruleList.put(fileName, rule);
+				synchronized (ruleList) {
+					WatchRuleListService.ruleList.put(fileName, rule);
+				}
 			} catch (final JsonParseException | JsonMappingException e) {
 				LOGGER.error(
 						"The Rule " + fileName + " seems to be invalid JSON. Please check the content of the file.");
@@ -86,6 +91,7 @@ public class WatchRuleListService extends TimerTask {
 				LOGGER.error("File " + fileName + " does not exist.");
 			}
 		}
+
 	}
 
 	/**
@@ -94,7 +100,9 @@ public class WatchRuleListService extends TimerTask {
 	 * @returns ruleList.
 	 */
 	public Object[] getRules() {
-		return WatchRuleListService.ruleList.values().toArray();
+		synchronized (ruleList) {
+			return WatchRuleListService.ruleList.values().toArray();
+		}
 	}
 
 	/**
@@ -104,7 +112,9 @@ public class WatchRuleListService extends TimerTask {
 	 */
 	public void ruleDel(final String ruleName) {
 		LOGGER.info("Remove " + ruleName + " from " + PATH_DIRECTORY + ".");
-		WatchRuleListService.ruleList.remove(ruleName);
+		synchronized (ruleList) {
+			WatchRuleListService.ruleList.remove(ruleName);
+		}
 	}
 
 	/**
@@ -114,14 +124,33 @@ public class WatchRuleListService extends TimerTask {
 	 * @returns true if its a valid rule, otherwise it will throw a exception
 	 */
 	public boolean checkValidity(final String ruleName) {
-
+		FileReader reader = null;
 		final MVELRuleFactory ruleFactory = new MVELRuleFactory(new YamlRuleDefinitionReader());
 		try {
-			ruleFactory.createRule(new FileReader(PATH_DIRECTORY_EXT + ruleName));
+			reader = new FileReader(PATH_DIRECTORY_EXT + ruleName);
+			final Rule rule = ruleFactory.createRule(reader);
+
+			reader.close();
 		} catch (final FileNotFoundException e) {
+			try {
+				if (reader != null) {
+					reader.close();
+				}
+			} catch (final IOException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
 			LOGGER.warn("Invalid file: " + ruleName);
 			return false;
 		} catch (final Exception e) {
+			try {
+				if (reader != null) {
+					reader.close();
+				}
+			} catch (final IOException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
 			LOGGER.warn("Please check rule " + ruleName + ". Seems to be a invalid rule.");
 			return false;
 		}
@@ -137,7 +166,6 @@ public class WatchRuleListService extends TimerTask {
 		if (listOfFiles != null) {
 			for (final File listOfFile : listOfFiles) {
 				final String name = listOfFile.getName();
-				System.out.println("THe names: " + name);
 				this.ruleAdd(name);
 			}
 		}
