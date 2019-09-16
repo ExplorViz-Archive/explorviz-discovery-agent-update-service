@@ -1,7 +1,7 @@
 
 ---
-name: tomcat
-description: Detects and sets a name for a Tomcat Web Server that is not started with Cargo
+name: tomcatRule
+description: Detects and sets a name for a Tomcat Web Server that is not started with Cargo.
 priority: 3
 condition: "updateExec.getOsExecutionCommand() != null && updateExec.getOsExecutionCommand.toLowerCase().contains(\"tomcat\") && !updateExec.getOsExecutionCommand.toLowerCase().contains(\"cargo\");"
 actions:

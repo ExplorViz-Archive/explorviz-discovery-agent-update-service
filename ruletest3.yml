@@ -1,0 +1,7 @@
+
+---
+name: third-failure
+description: Changes the aop.xml and proposes a execution command of a the sampleApplication.
+actions:
+  - "processInfo.setHidden(true);"
+ 

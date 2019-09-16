@@ -1,8 +1,8 @@
 
 ---
-description: DÖNER LECKER FRESSEN  
-priority: 1
-condition: "person.age > 18"
+description: Failuretest
+priority: 5
+condition: "updateExec.getOsExecutionCommand()!= null && updateExec.getOsExecutionCommand().toLowerCase().contains(\"sample\");"
 actions:
-  - "person.setAdult(true);"
+  "updateExec.setName(\"KiekerSampleAppFailure\");"
   - "System.out.println(\"It rains, take an umbrella!\");"
