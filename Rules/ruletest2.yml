@@ -1,9 +1,0 @@
-
----
-name: ruletest2
-description: invalid fact
-priority: 1
-condition: "procesfo.getOsExecutionCommand().toLowerCase().contains(\"sample\");"
-s:
-  - "execObj.getStrat().setExec(true);"
-  - "System.out.println(\" Give me money \");"

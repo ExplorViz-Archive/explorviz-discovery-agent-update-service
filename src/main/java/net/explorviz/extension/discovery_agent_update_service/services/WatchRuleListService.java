@@ -57,7 +57,8 @@ public class WatchRuleListService extends TimerTask {
           StandardWatchEventKinds.ENTRY_CREATE, StandardWatchEventKinds.ENTRY_MODIFY);
     } catch (final IOException e) {
       LOGGER.error(
-          "Can't create folder for rules. Please choose a other folder and restart the UpdateService.");
+          "Can't create folder for rules. Please choose a other folder and restart the UpdateService.",
+          e);
     }
 
   }
@@ -74,11 +75,7 @@ public class WatchRuleListService extends TimerTask {
       final ObjectMapper newmap = new ObjectMapper(new YAMLFactory());
       newmap.enable(SerializationFeature.INDENT_OUTPUT);
 
-      /*
-       * Change name of rule to filename, should the name of the rule is not equal to the filename.
-       * Reason: rules in a rulebase need unambiguous names, otherwise the rule engine will ignore
-       * one of the rules.
-       */
+
       LOGGER.info("Adding " + fileName + " from directory " + PATH_DIRECTORY + ".");
       try {
         final RuleModel rule =

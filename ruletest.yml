@@ -1,8 +1,0 @@
-
----
-description: Failuretest
-priority: 5
-condition: "updateExec.getOsExecutionCommand()!= null && updateExec.getOsExecutionCommand().toLowerCase().contains(\"sample\");"
-actions:
-  "updateExec.setName(\"KiekerSampleAppFailure\");"
-  - "System.out.println(\"It rains, take an umbrella!\");"

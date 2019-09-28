@@ -17,7 +17,7 @@ buildscript {
 
   dependencies {
     classpath "gradle.plugin.com.github.spotbugs:spotbugs-gradle-plugin:1.7.1"
-    classpath 'com.github.jengelman.gradle.plugins:shadow:2.0.4'
+    classpath 'com.github.jengelman.gradle.plugins:shadow:5.1.0'
   	
   }
 }
@@ -79,6 +79,8 @@ dependencies {
 	
 }
 
+
+
 // Disable standard Jar build and
 // use fat-Jar instead with all dependencies
 assemble.dependsOn shadowJar
@@ -88,15 +90,16 @@ jar.enabled = false
 jar {
   manifest {
     attributes(
-      'Main-Class': 'net.explorviz.extension.discovery-agent-update-service.main.Main'
+      'Main-Class': 'net.explorviz.extension.discovery_agent_update_service.main.Main'
     )
   }
 }
 
 // Define the main class for the gradle application tasks
 application {
-    mainClassName = 'net.explorviz.extension.discovery-agent-update-service.main.Main'
+    mainClassName = 'net.explorviz.extension.discovery_agent_update_service.main.Main'
 }
+
 
 shadowJar {
   archiveName = "${project.name}.${extension}"
