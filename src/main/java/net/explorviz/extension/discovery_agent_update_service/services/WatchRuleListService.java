@@ -29,7 +29,7 @@ public class WatchRuleListService extends TimerTask {
 
   private static final org.slf4j.Logger LOGGER =
       LoggerFactory.getLogger(WatchRuleListService.class);
-  private static String PATH_DIRECTORY = "Rules";
+  private static String PATH_DIRECTORY = "Rules3";
   private static String PATH_DIRECTORY_EXT = PATH_DIRECTORY + File.separator;
   private static WatchService watchService;
   private static HashMap<String, RuleModel> ruleList = new HashMap<>();

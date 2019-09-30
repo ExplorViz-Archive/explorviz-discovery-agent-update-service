@@ -4,7 +4,7 @@ This repository holds the UpdateService for the Discovery Agent. The UpdateServi
 
 ## Setup Development / Usage
 1. Modify `watch.directory` in the `explorviz.properties` file.
-2. Start the `UpdateService.jar` next to the backend.
+2. Start the `build/libs/explorviz-backend-extension-discovery-agent-update-service.jar` next to the backend. Also be aware to start the UpdateService in the same directory as the `Rules` folder.
 
 
 ## Attention
